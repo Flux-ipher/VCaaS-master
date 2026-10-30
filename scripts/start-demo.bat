@@ -40,7 +40,7 @@ echo • Backend API: http://localhost:8000
 echo • API Docs: http://localhost:8000/docs
 echo • Admin Login: http://localhost:3000/admin/login
 echo   - Username: ritsa_admin
-echo   - Password: VoiceClone2024!@#
+echo   - Password: set ADMIN_INITIAL_PASSWORD before running the database setup
 echo.
 echo Press any key to close this window...
 pause
