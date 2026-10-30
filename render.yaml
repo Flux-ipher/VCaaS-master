@@ -1,0 +1,48 @@
+services:
+  # -------------------------------------------------------------
+  # 1. VCaaS FastAPI Backend (All 6 Defense Layers + Live Streaming)
+  # -------------------------------------------------------------
+  - type: web
+    name: vcaas-backend
+    runtime: python
+    region: ohio
+    plan: free
+    rootDir: backend
+    buildCommand: pip install --upgrade pip && pip install -r requirements-render.txt
+    startCommand: python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PUBLIC_STREAMING_ENABLED
+        value: "true"
+      - key: ALLOWED_ORIGINS
+        value: https://vcaas.vercel.app,https://vcaas-rbu8.vercel.app,http://localhost:3000,*
+      - key: ALLOWED_HOSTS
+        value: "*"
+
+  # -------------------------------------------------------------
+  # 2. VCaaS Next.js Frontend Dashboard (Optional on Render)
+  # -------------------------------------------------------------
+  - type: web
+    name: vcaas-frontend
+    runtime: node
+    region: ohio
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: vcaas-backend
+          property: host
+

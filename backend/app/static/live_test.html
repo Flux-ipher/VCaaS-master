@@ -380,6 +380,14 @@
       </div>
 
       <div id="file-results" style="display: none;">
+        <div class="card" style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-2);">AUDIO PREVIEW:</span>
+            <span id="f-file-name" style="font-size: 0.9rem; font-weight: 600; color: #a7f3d0;"></span>
+          </div>
+          <audio id="f-audio-player" controls style="height: 36px; border-radius: 8px; outline: none;"></audio>
+        </div>
+
         <div class="hero-verdict">
           <div style="color: var(--text-2); font-size: 0.9rem;">FORENSIC VERDICT</div>
           <div id="f-verdict-tag" class="verdict-tag">AUTHENTIC (HUMAN)</div>
@@ -438,7 +446,10 @@
         </div>
 
         <div class="card">
-          <div class="card-title">Raw Analysis Payload (JSON)</div>
+          <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Raw Analysis Payload (JSON)</span>
+            <button class="btn btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 0.75rem;" onclick="copyJsonPayload()">Copy JSON</button>
+          </div>
           <pre id="f-raw-json">{}</pre>
         </div>
       </div>
@@ -684,9 +695,29 @@
       }
     });
 
+    function copyJsonPayload() {
+      const text = document.getElementById('f-raw-json').innerText;
+      if (!text || text === '{}') return;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Analysis JSON copied to clipboard!');
+      }).catch(() => {
+        const dummy = document.createElement('textarea');
+        dummy.value = text;
+        document.body.appendChild(dummy);
+        dummy.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummy);
+        alert('Analysis JSON copied to clipboard!');
+      });
+    }
+
     async function uploadAndAnalyze(file) {
       document.getElementById('file-loading').style.display = 'block';
       document.getElementById('file-results').style.display = 'none';
+
+      document.getElementById('f-file-name').innerText = file.name;
+      const audioPlayer = document.getElementById('f-audio-player');
+      audioPlayer.src = URL.createObjectURL(file);
 
       const formData = new FormData();
       formData.append('file', file);

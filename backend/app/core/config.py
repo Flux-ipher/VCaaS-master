@@ -129,7 +129,7 @@ class Settings(BaseSettings):
     UPLOAD_PATH: str = Field(default="./uploads", env="UPLOAD_PATH")
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(".env", "env.env"),
         env_file_encoding="utf-8",
         case_sensitive=True,
         extra="ignore"

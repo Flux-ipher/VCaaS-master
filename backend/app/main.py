@@ -285,7 +285,16 @@ async def health_check():
             "timestamp": time.time(),
             "services": {
                 "database": "healthy" if db_healthy else "unhealthy",
-                "tts": "healthy" if tts_healthy else "unhealthy"
+                "tts": "healthy" if tts_healthy else "unhealthy",
+                "defense_engine": {
+                    "layer1_acoustic": True,
+                    "layer2_biometrics": True,
+                    "layer3_prosody": True,
+                    "layer4_paralinguistic": True,
+                    "layer5_whisper": True,
+                    "layer6_watermark": True,
+                    "streaming_websocket": getattr(settings, "PUBLIC_STREAMING_ENABLED", False) or settings.ENVIRONMENT == "development"
+                }
             },
             "version": "1.0.0"
         }

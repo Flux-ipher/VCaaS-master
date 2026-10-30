@@ -131,40 +131,60 @@ function getLayerScore(layer: LayerResult): number | null {
   return null;
 }
 
+const LAYER_DISPLAY_NAMES: Record<string, string> = {
+  layer1_antispoof: 'Layer 1: Acoustic Artifacts',
+  layer2_speaker_consistency: 'Layer 2: Speaker Biometrics',
+  layer2_speaker: 'Layer 2: Speaker Biometrics',
+  layer3_prosody: 'Layer 3: Pitch Dynamics (f0)',
+  layer4_paralinguistic: 'Layer 4: Paralinguistic Energy',
+  layer5_semantic: 'Layer 5: Whisper Semantic ASR',
+  layer6_watermark: 'Layer 6: Watermark & Provenance',
+};
+
 /** Mini per-layer breakdown row */
 function LayerRow({ name, layer }: { name: string; layer: LayerResult }) {
   const score = getLayerScore(layer);
   const color = score !== null ? scoreColor(score) : 'var(--text-3)';
   const isSkipped = (layer as any).status === 'skipped';
   const hasError = Boolean((layer as any).error);
+  const displayName = LAYER_DISPLAY_NAMES[name] || name.replace(/_/g, ' ');
+  const transcription = (layer as any).transcription;
+  const speechRate = (layer as any).speech_rate_wpm;
 
   return (
-    <div className="ld-layer-row">
-      <span className="ld-layer-name">{name.replace(/_/g, ' ')}</span>
-      {score !== null && !hasError && (
-        <>
-          <div className="ld-layer-bar-track">
-            <motion.div
-              className="ld-layer-bar-fill"
-              initial={{ width: 0 }}
-              animate={{ width: pct(score) }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              style={{ background: color }}
-            />
+    <div className="ld-layer-row-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '4px', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      <div className="ld-layer-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+        <span className="ld-layer-name" style={{ fontWeight: 600, fontSize: '0.85rem' }}>{displayName}</span>
+        {score !== null && !hasError && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, maxWidth: '200px' }}>
+            <div className="ld-layer-bar-track" style={{ flex: 1 }}>
+              <motion.div
+                className="ld-layer-bar-fill"
+                initial={{ width: 0 }}
+                animate={{ width: pct(score) }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                style={{ background: color }}
+              />
+            </div>
+            <span className="ld-layer-score" style={{ color, fontSize: '0.85rem', fontWeight: 600 }}>{pct(score)}</span>
           </div>
-          <span className="ld-layer-score" style={{ color }}>{pct(score)}</span>
-        </>
-      )}
-      {layer.verdict && !hasError && (
-        <span className="ld-layer-verdict" style={{ color: 'var(--text-2)' }}>{layer.verdict}</span>
-      )}
-      {isSkipped && (
-        <span className="ld-layer-verdict" style={{ color: 'var(--text-3)' }}>Skipped</span>
-      )}
-      {hasError && (
-        <span className="ld-layer-verdict" style={{ color: 'var(--warning)', fontSize: '0.75rem' }}>
-          {(layer as any).error?.slice(0, 30)}…
-        </span>
+        )}
+        {layer.verdict && !hasError && (
+          <span className="ld-layer-verdict" style={{ color: 'var(--text-2)', fontSize: '0.8rem' }}>{layer.verdict}</span>
+        )}
+        {isSkipped && (
+          <span className="ld-layer-verdict" style={{ color: 'var(--text-3)', fontSize: '0.8rem' }}>Skipped</span>
+        )}
+        {hasError && (
+          <span className="ld-layer-verdict" style={{ color: 'var(--warning)', fontSize: '0.75rem' }}>
+            {(layer as any).error?.slice(0, 30)}…
+          </span>
+        )}
+      </div>
+      {transcription && (
+        <div style={{ fontSize: '0.78rem', color: '#a7f3d0', fontStyle: 'italic', paddingLeft: '8px' }}>
+          "{transcription}" {speechRate ? `(${Math.round(speechRate)} WPM)` : ''}
+        </div>
       )}
     </div>
   );
@@ -245,22 +265,18 @@ export default function LiveDemoPage() {
       /* 3. Open WebSocket */
       setWsState('connecting');
       const currentUser = getCurrentUser();
-      if (!currentUser) {
-        setError('Sign in with Firebase to use the live stream.');
-        setListening(false);
-        setWsState('closed');
-        return;
+      let token: string | null = null;
+      if (currentUser) {
+        try {
+          token = await currentUser.getIdToken();
+        } catch (e) {
+          console.warn('Could not retrieve Firebase token, proceeding as guest:', e);
+        }
       }
 
-      const token = await currentUser.getIdToken();
-      if (!token) {
-        setError('Your Firebase session is missing an ID token. Please sign in again.');
-        setListening(false);
-        setWsState('closed');
-        return;
-      }
-
-      const wsUrl = `${WS_URL}?token=${encodeURIComponent(token)}`;
+      const wsUrl = token
+        ? `${WS_URL}?token=${encodeURIComponent(token)}`
+        : WS_URL;
       const ws = new WebSocket(wsUrl);
       ws.binaryType = 'arraybuffer';
       wsRef.current = ws;
