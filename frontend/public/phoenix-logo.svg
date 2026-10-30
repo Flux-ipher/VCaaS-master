@@ -1,0 +1,55 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="95" fill="url(#bgGradient)" stroke="url(#borderGradient)" stroke-width="2"/>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1b4b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#312e81;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="borderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="phoenixGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="wingsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f472b6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Phoenix Body -->
+  <path d="M100 60 C85 60 75 70 75 85 C75 100 85 130 100 140 C115 130 125 100 125 85 C125 70 115 60 100 60 Z" fill="url(#phoenixGradient)"/>
+  
+  <!-- Phoenix Head/Neck -->
+  <ellipse cx="100" cy="55" rx="8" ry="15" fill="url(#phoenixGradient)"/>
+  <circle cx="100" cy="45" r="6" fill="url(#phoenixGradient)"/>
+  
+  <!-- Left Wing -->
+  <path d="M75 85 C50 75 35 80 25 90 C20 95 22 105 30 110 C40 115 55 110 65 105 C70 100 75 90 75 85 Z" fill="url(#wingsGradient)" opacity="0.9"/>
+  
+  <!-- Left Wing Details -->
+  <path d="M65 88 C45 83 35 88 30 95 C28 98 30 102 35 104 C42 106 52 103 60 100 C65 97 68 92 65 88 Z" fill="url(#wingsGradient)" opacity="0.7"/>
+  
+  <!-- Right Wing -->
+  <path d="M125 85 C150 75 165 80 175 90 C180 95 178 105 170 110 C160 115 145 110 135 105 C130 100 125 90 125 85 Z" fill="url(#wingsGradient)" opacity="0.9"/>
+  
+  <!-- Right Wing Details -->
+  <path d="M135 88 C155 83 165 88 170 95 C172 98 170 102 165 104 C158 106 148 103 140 100 C135 97 132 92 135 88 Z" fill="url(#wingsGradient)" opacity="0.7"/>
+  
+  <!-- Phoenix Tail Feathers -->
+  <path d="M100 140 C95 150 98 160 105 165 C110 168 115 165 115 160 C115 150 108 145 100 140 Z" fill="url(#phoenixGradient)" opacity="0.8"/>
+  <path d="M100 140 C105 150 102 160 95 165 C90 168 85 165 85 160 C85 150 92 145 100 140 Z" fill="url(#phoenixGradient)" opacity="0.8"/>
+  
+  <!-- Phoenix Crown/Crest -->
+  <path d="M100 40 C95 35 98 30 103 32 C105 33 105 37 103 40 C101 42 100 40 100 40 Z" fill="url(#phoenixGradient)"/>
+  <path d="M100 40 C105 35 102 30 97 32 C95 33 95 37 97 40 C99 42 100 40 100 40 Z" fill="url(#phoenixGradient)"/>
+</svg>

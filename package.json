@@ -1,0 +1,13 @@
+{
+  "name": "vcaas",
+  "private": true,
+  "scripts": {
+    "backend": "cd backend && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
+    "frontend": "npm --prefix frontend run dev",
+    "dev": "npx concurrently -k -n backend,frontend -c blue,magenta \"npm run backend\" \"npm run frontend\"",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

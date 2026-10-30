@@ -1,0 +1,96 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Environment variables
+.env
+*.env
+*.env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+.next/
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+cache/
+data/
+datasets/
+training/
+Training/
+*.csv
+*.jsonl
+*.parquet
+*.pid
+*.seed
+*.pid.lock
+
+# Audio files and models
+*.wav
+*.mp3
+*.flac
+*.ogg
+/models/
+backend/models/
+audio_uploads/
+temp_audio/
+# Demo/runtime artifacts
+backend/voice_models/
+backend/audio_output/
+backend/training_data/
+audio_cache/
+
+# Database
+*.db
+*.sqlite3
+
+# Docker
+.dockerignore
+Dockerfile
+Dockerfile.*
+docker-compose*.yml
+docker-compose*.yaml
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# pytest
+.pytest_cache/
+.coverage
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Markdown docs
+*.md
+!/README.md
+!/PROJECT_CONTEXT.md
+!/docs/*.md
